@@ -1,18 +1,20 @@
 #Solver
 
-post route: /solver/
+post route: /solvers/
 method: post
 
 request body:
-{"name": string,
-"password": string,
-"email": string
+{
+   "name":"string",
+   "password":"string",
+   "email":"string"
 }
 
 reponse body:
-{"id": int,
-"name": string,
-"email": string
+{
+   "id":"int",
+   "name":"string",
+   "email":"string"
 }
 
 get all route: /solvers/
@@ -22,45 +24,63 @@ request body:
 {}
 
 reponse body:
-[{"id": int,
-"name": string,
-"email": string
-},{
-submission: {"id": int,
-"body": string,
-"solver_id": int,
-"language_id": int,
-"test_case_id": int}}]
+[
+   {
+      "id":"int",
+      "name":"string",
+      "email":"string",
+      "submissions":
+      [
+         {
+            "id":"int",
+            "body":"string",
+            "solver_id":"int",
+            "language_id":"int",
+            "failed_test_case_id":"int"
+         }
+      ]
+   }
+]
 
-get by id route: /solver/{solver_id}
+get by id route: /solvers/{solver_id}
 method: get
 
 request body:
 {}
 
 reponse body:
-{"id": int,
-"name": string,
-"email": string
+{
+   "id":"int",
+   "name":"string",
+   "email":"string",
+   "submissions":
+   [
+      {
+         "id":"int",
+         "body":"string",
+         "solver_id":"int",
+         "language_id":"int",
+         "failed_test_case_id":"int"
+      }
+   ]
 }
-
-
-
 #Setter
 
-post route: /setter/
+post route: /setters/
 method: post
 
 request body:
-{"name": string,
-"password": string,
-"email": string
+{
+   "name":"string",
+   "password":"string",
+   "email":"string"
 }
 
 reponse body:
-{"id": int,
-"name": string,
-"email": string
+{
+   "id":"int",
+   "name":"string",
+   "email":"string"
 }
 
 get all route: /setters/
@@ -70,46 +90,64 @@ request body:
 {}
 
 reponse body:
-[{"id": int,
-"name": string,
-"email": string
-},
-{question: {"id": int,
-"title": string,
-"body": string,
-"author_id": int,
-"level_id": int}}]
+[
+   {
+      "id":"int",
+      "name":"string",
+      "email":"string",
+      "questions":
+      [
+         {
+            "id":"int",
+            "title":"string",
+            "body":"string",
+            "author_id":"int",
+            "level_id":"int"
+         }
+      ]
+   }
+]
 
-get by id route: /setter/{setter_id}
+get by id route: /setters/{setter_id}
 method: get
 
 request body:
 {}
 
 reponse body:
-{"id": int,
-"name": string,
-"email": string
+{
+   "id":"int",
+   "name":"string",
+   "email":"string",
+   "questions":
+   [
+      {
+         "id":"int",
+         "title":"string",
+         "body":"string",
+         "author_id":"int",
+         "level_id":"int"
+      }
+   ]
 }
-
-
-
 
 #admin
 
-post route: /admin/
+post route: /admins/
 method: post
 
 request body:
-{"name": string,
-"password": string,
-"email": string
+{
+   "name":"string",
+   "password":"string",
+   "email":"string"
 }
 
 reponse body:
-{"id": int,
-"name": string,
-"email": string
+{
+   "name":"string",
+   "password":"string",
+   "email":"string"
 }
 
 get all route: /admins/
@@ -119,42 +157,47 @@ request body:
 {}
 
 reponse body:
-[{"id": int,
-"name": string,
-"email": string
-}]
+[
+   {
+      "id":"int",
+      "name":"string",
+      "email":"string"
+   }
+]
 
-get by id route: /admin/{admin_id}
+get by id route: /admins/{admin_id}
 method: get
 
 request body:
 {}
 
 reponse body:
-{"id": int,
-"name": string,
-"email": string
+{
+   "id":"int",
+   "name":"string",
+   "email":"string"
 }
-
 
 #question
 
-post route: /question/
+post route: /questions/
 method: post
 
 request body:
-{"title": string,
-"body": string,
-"author_id": int,
-"level_id": int
+{
+   "title":"string",
+   "body":"string",
+   "author_id":"int",
+   "level_id":"int"
 }
 
 reponse body:
-{"id": int,
-"title": string,
-"body": string,
-"author_id": int,
-"level_id": int
+{
+   "id":"int",
+   "title":"string",
+   "body":"string",
+   "author_id":"int",
+   "level_id":"int"
 }
 
 get all route: /questions/
@@ -164,61 +207,129 @@ request body:
 {}
 
 reponse body:
-[{"id": int,
-"title": string,
-"body": string,
-"author_id": int,
-"level_id": int
-},
-{solver:
-{"id": int,
-"name": string,
-"email": string}},
-{submission:
-{"id": int,
-"body": string,
-"solver_id": int,
-"language_id": int,
-"test_case_id": int}},
-{level: 
-{"id": int,
-"body": string}},
-{test_case:
-{ "id": int,
-"input": string,
-"output": string,
-"ques_id": int}},
-{tag: 
-{"id": int,
-"body": string}}]
+[
+   {
+      "id":"int",
+      "title":"string",
+      "body":"string",
+      "author_id":"int",
+      "level_id":"int",
+      "solvers":
+      [
+         {
+            "id":"int",
+            "name":"string",
+            "email":"string"
+         }
+      ],
+      "submissions":
+      [
+         {
+            "id":"int",
+            "body":"string",
+            "solver_id":"int",
+            "language_id":"int",
+            "failed_test_case_id":"int"
+         }
+      ],
+      "level":
+      {
+         "id":"int",
+         "body":"string"
+      },
+      "test_cases":
+      [
+         {
+            "id":"int",
+            "input":"string",
+            "output":"string",
+            "ques_id":"int"
+         }
+      ],
+      "tags":
+      [
+         {
+            "id":"int",
+            "body":"string"
+         }
+      ]
+   }
+]
 
-get by id route: /question/{question_id}
+get by id route: /questions/{question_id}
 method: get
 
 request body:
 {}
 
 reponse body:
-{"id": int,
-"title": string,
-"body": string,
-"author_id": int,
-"level_id": int
+{
+   "id":"int",
+   "title":"string",
+   "body":"string",
+   "author_id":"int",
+   "level_id":"int",
+   "submissions":
+   [
+      {
+         "id":"int",
+         "body":"string",
+         "solver_id":"int",
+         "language_id":"int",
+         "failed_test_case_id":"int"
+      }
+   ],
+   "level":
+   {
+      "id":"int",
+      "body":"string"
+   },
+   "test_cases":
+   [
+      {
+         "id":"int",
+         "input":"string",
+         "output":"string",
+         "ques_id":"int"
+      }
+   ],
+   "tags":
+   [
+      {
+         "id":"int",
+         "body":"string"
+      }
+   ]
 }
 
+get testcase by question id route: /questions/{question_id}/test_case
+method: get
+
+request body:
+{}
+
+reponse body:
+[
+   {
+      "id":"int",
+      "test_case_id":"int"
+   }
+]
 
 #language
 
-post route: /language/
+post route: /languages/
 method: post
 
 request body:
-{"body": string
+{
+   "title":"string"
 }
 
 reponse body:
-{"id": int,
-"body": string
+{
+   "id":"int",
+   "title":"string"
 }
 
 get all route: /languages/
@@ -228,40 +339,59 @@ request body:
 {}
 
 reponse body:
-[{"id": int,
-"body": string
-},
-{submission:
-{"id": int,
-"body": string,
-"solver_id": int,
-"language_id": int,
-"test_case_id": int}}]
+[
+   {
+      "id":"int",
+      "title":"string",
+      "submissions":
+      [
+         {
+            "id":"int",
+            "body":"string",
+            "solver_id":"int",
+            "language_id":"int",
+            "failed_test_case_id":"int"
+         }
+      ]
+   }
+]
 
-get by id route: /language/{language_id}
+get by id route: /languages/{language_id}
 method: get
 
 request body:
 {}
 
 reponse body:
-{"id": int,
-"body": string
+{
+   "id":"int",
+   "title":"string",
+   "submissions":
+   [
+      {
+         "id":"int",
+         "body":"string",
+         "solver_id":"int",
+         "language_id":"int",
+         "failed_test_case_id":"int"
+      }
+   ]
 }
-
 
 #tag
 
-post route: /tag/
+post route: /tags/
 method: post
 
 request body:
-{"body": string
+{
+   "title":"string"
 }
 
 reponse body:
-{"id": int,
-"body": string
+{
+   "id":"int",
+   "title":"string"
 }
 
 get all route: /tags/
@@ -271,72 +401,78 @@ request body:
 {}
 
 reponse body:
-[{"id": int,
-"body": string
-},
-{question: {"id": int,
-"title": string,
-"body": string,
-"author_id": int,
-"level_id": int}}]
+[
+   {
+      "id":"int",
+      "title":"string",
+      "questions":
+      [
+         {
+            "id":"int",
+            "title":"string",
+            "body":"string",
+            "author_id":"int",
+            "level_id":"int"
+         }
+      ]
+   }
+]
 
-get by id route: /tag/{tag_id}
+get by id route: /tags/{tag_id}
 method: get
 
 request body:
 {}
 
 reponse body:
-{"id": int,
-"body": string
+{
+   "id":"int",
+   "title":"string",
+   "questions":
+   [
+      {
+         "id":"int",
+         "title":"string",
+         "body":"string",
+         "author_id":"int",
+         "level_id":"int"
+      }
+   ]
 }
 
+#question_tag
 
-
-#ques_tag
-
-post route: /ques_tag/
+post route: /question_tags/{question_id}
 method: post
 
 request body:
-{"ques_id": int,
-"tag_id": int
+{
+    "tag_id": int
 }
 
 reponse body:
-{"ques_id": int,
-"tag_id": int
+{
+   "question_id":"int",
+   "tag_id":"int"
 }
-
-get all route: /ques_tags/
-method: get
-
-request body:
-{}
-
-reponse body:
-[{"ques_id": int,
-"tag_id": int
-}]
-
-
 
 #test_case
 
-post route: /test_case/
+post route: /test_cases/{question_id}
 method: post
 
 request body:
-{"input": string,
-"output": string,
-"ques_id": int
+{
+   "input":"string",
+   "output":"string"
 }
 
 reponse body:
-{"id": int,
-"input": string,
-"output": string,
-"ques_id": int
+{
+   "id":"int",
+   "input":"string",
+   "output":"string",
+   "question_id":"int"
 }
 
 get all route: /test_cases/
@@ -346,51 +482,65 @@ request body:
 {}
 
 reponse body:
-[{"id": int,
-"input": string,
-"output": string,
-"ques_id": int
-},
-{question:
-{"id": int,
-"title": string,
-"body": string,
-"author_id": int,
-"level_id": int}}]
+[
+   {
+      "id":"int",
+      "input":"string",
+      "output":"string",
+      "question_id":"int",
+      "questions":
+      {
+         "id":"int",
+         "title":"string",
+         "body":"string",
+         "author_id":"int",
+         "level_id":"int"
+      }
+   }
+]
 
-get by id route: /test_case/{test_case_id}
+get by id route: /test_cases/{test_case_id}
 method: get
 
 request body:
 {}
 
 reponse body:
-{"id": int,
-"input": string,
-"output": string,
-"ques_id": int
+{
+   "id":"int",
+   "input":"string",
+   "output":"string",
+   "question_id":"int",
+   "questions":
+   {
+      "id":"int",
+      "title":"string",
+      "body":"string",
+      "author_id":"int",
+      "level_id":"int"
+   }
 }
 
+#submissions
 
-
-#submission
-
-post route: /submission/
+post route: /submissions/{question_id}
 method: post
 
 request body:
-{"body": string,
-"solver_id": int,
-"language_id": int,
-"test_case_id": int
+{
+   "body":"string",
+   "solver_id":"int",
+   "language_id":"int"
 }
 
 reponse body:
-{"id": int,
-"body": string,
-"solver_id": int,
-"language_id": int,
-"test_case_id": int
+{
+   "id":"int",
+   "body":"string",
+   "solver_id":"int",
+   "language_id":"int",
+   "failed_test_case_id":"int",
+   "question_id":"int"
 }
 
 get all route: /submissions/
@@ -400,54 +550,83 @@ request body:
 {}
 
 reponse body:
-[{"id": int,
-"body": string,
-"solver_id": int,
-"language_id": int,
-"test_case_id": int
-},
-{question: 
-{"id": int,
-"title": string,
-"body": string,
-"author_id": int,
-"level_id": int}},
-{language: 
-{"id": int,
-"body": string}},
-{solver: {"id": int,
-"name": string,
-"email": string
-}}]
+[
+   {
+      "id":"int",
+      "body":"string",
+      "solver_id":"int",
+      "language_id":"int",
+      "failed_test_case_id":"int",
+      "questions":
+      {
+         "id":"int",
+         "title":"string",
+         "body":"string",
+         "author_id":"int",
+         "level_id":"int"
+      },
+      "languages":
+      {
+         "id":"int",
+         "body":"string"
+      },
+      "solvers":
+      {
+         "id":"int",
+         "name":"string",
+         "email":"string"
+      }
+   }
+]
 
-get by id route: /submission/{submission_id}
+get by id route: /submissions/{submission_id}
 method: get
 
 request body:
 {}
 
 reponse body:
-{"id": int,
-"body": string,
-"solver_id": int,
-"language_id": int,
-"test_case_id": int
+{
+   "id":"int",
+   "body":"string",
+   "solver_id":"int",
+   "language_id":"int",
+   "failed_test_case_id":"int",
+   "questions":
+   {
+      "id":"int",
+      "title":"string",
+      "body":"string",
+      "author_id":"int",
+      "level_id":"int"
+   },
+   "languages":
+   {
+      "id":"int",
+      "body":"string"
+   },
+   "solvers":
+   {
+      "id":"int",
+      "name":"string",
+      "email":"string"
+   }
 }
-
-
 
 #level
 
-post route: /level/
+post route: /levels/
 method: post
 
 request body:
-{"body": string
+{
+    "title": string
 }
 
 reponse body:
-{"id": int,
-"body": string
+{
+    "id": int,
+    "title": string
 }
 
 get all route: /levels/
@@ -457,23 +636,41 @@ request body:
 {}
 
 reponse body:
-[{"id": int,
-"body": string
-},
-{question: 
-{"id": int,
-"title": string,
-"body": string,
-"author_id": int,
-"level_id": int}},]
+[
+   {
+      "id":"int",
+      "title":"string",
+      "questions":
+      [
+         {
+            "id":"int",
+            "title":"string",
+            "body":"string",
+            "author_id":"int",
+            "level_id":"int"
+         }
+      ]
+   }
+]
 
-get by id route: /level/{level_id}
+get by id route: /levels/{level_id}
 method: get
 
 request body:
 {}
 
 reponse body:
-{"id": int,
-"body": string
+{
+   "id":"int",
+   "title":"string",
+   "questions":
+   [
+      {
+         "id":"int",
+         "title":"string",
+         "body":"string",
+         "author_id":"int",
+         "level_id":"int"
+      }
+   ]
 }
