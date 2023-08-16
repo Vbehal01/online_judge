@@ -29,7 +29,7 @@ reponse body:
       "id":"int",
       "name":"string",
       "email":"string",
-      "submission":
+      "submissions":
       [
          {
             "id":"int",
@@ -53,7 +53,7 @@ reponse body:
    "id":"int",
    "name":"string",
    "email":"string",
-   "submission":
+   "submissions":
    [
       {
          "id":"int",
@@ -95,7 +95,7 @@ reponse body:
       "id":"int",
       "name":"string",
       "email":"string",
-      "question":
+      "questions":
       [
          {
             "id":"int",
@@ -119,7 +119,7 @@ reponse body:
    "id":"int",
    "name":"string",
    "email":"string",
-   "question":
+   "questions":
    [
       {
          "id":"int",
@@ -214,7 +214,7 @@ reponse body:
       "body":"string",
       "author_id":"int",
       "level_id":"int",
-      "solver":
+      "solvers":
       [
          {
             "id":"int",
@@ -222,7 +222,7 @@ reponse body:
             "email":"string"
          }
       ],
-      "submission":
+      "submissions":
       [
          {
             "id":"int",
@@ -237,7 +237,7 @@ reponse body:
          "id":"int",
          "body":"string"
       },
-      "test_case":
+      "test_cases":
       [
          {
             "id":"int",
@@ -246,7 +246,7 @@ reponse body:
             "ques_id":"int"
          }
       ],
-      "tag":
+      "tags":
       [
          {
             "id":"int",
@@ -269,7 +269,7 @@ reponse body:
    "body":"string",
    "author_id":"int",
    "level_id":"int",
-   "submission":
+   "submissions":
    [
       {
          "id":"int",
@@ -284,7 +284,7 @@ reponse body:
       "id":"int",
       "body":"string"
    },
-   "test_case":
+   "test_cases":
    [
       {
          "id":"int",
@@ -293,7 +293,7 @@ reponse body:
          "ques_id":"int"
       }
    ],
-   "tag":
+   "tags":
    [
       {
          "id":"int",
@@ -343,7 +343,7 @@ reponse body:
    {
       "id":"int",
       "title":"string",
-      "submission":
+      "submissions":
       [
          {
             "id":"int",
@@ -366,7 +366,7 @@ reponse body:
 {
    "id":"int",
    "title":"string",
-   "submission":
+   "submissions":
    [
       {
          "id":"int",
@@ -405,7 +405,7 @@ reponse body:
    {
       "id":"int",
       "title":"string",
-      "question":
+      "questions":
       [
          {
             "id":"int",
@@ -428,7 +428,7 @@ reponse body:
 {
    "id":"int",
    "title":"string",
-   "question":
+   "questions":
    [
       {
          "id":"int",
@@ -488,7 +488,7 @@ reponse body:
       "input":"string",
       "output":"string",
       "question_id":"int",
-      "question":
+      "questions":
       {
          "id":"int",
          "title":"string",
@@ -511,7 +511,7 @@ reponse body:
    "input":"string",
    "output":"string",
    "question_id":"int",
-   "question":
+   "questions":
    {
       "id":"int",
       "title":"string",
@@ -521,7 +521,7 @@ reponse body:
    }
 }
 
-#submission
+#submissions
 
 post route: /submissions/{question_id}
 method: post
@@ -557,7 +557,7 @@ reponse body:
       "solver_id":"int",
       "language_id":"int",
       "failed_test_case_id":"int",
-      "question":
+      "questions":
       {
          "id":"int",
          "title":"string",
@@ -565,12 +565,12 @@ reponse body:
          "author_id":"int",
          "level_id":"int"
       },
-      "language":
+      "languages":
       {
          "id":"int",
          "body":"string"
       },
-      "solver":
+      "solvers":
       {
          "id":"int",
          "name":"string",
@@ -592,7 +592,7 @@ reponse body:
    "solver_id":"int",
    "language_id":"int",
    "failed_test_case_id":"int",
-   "question":
+   "questions":
    {
       "id":"int",
       "title":"string",
@@ -600,12 +600,12 @@ reponse body:
       "author_id":"int",
       "level_id":"int"
    },
-   "language":
+   "languages":
    {
       "id":"int",
       "body":"string"
    },
-   "solver":
+   "solvers":
    {
       "id":"int",
       "name":"string",
@@ -640,7 +640,7 @@ reponse body:
    {
       "id":"int",
       "title":"string",
-      "question":
+      "questions":
       [
          {
             "id":"int",
@@ -663,7 +663,7 @@ reponse body:
 {
    "id":"int",
    "title":"string",
-   "question":
+   "questions":
    [
       {
          "id":"int",
