@@ -30,13 +30,15 @@ reponse body:
       "name":"string",
       "email":"string",
       "submission":
-      {
-         "id":"int",
-         "body":"string",
-         "solver_id":"int",
-         "language_id":"int",
-         "failed_test_case_id":"int"
-      }
+      [
+         {
+            "id":"int",
+            "body":"string",
+            "solver_id":"int",
+            "language_id":"int",
+            "failed_test_case_id":"int"
+         }
+      ]
    }
 ]
 
@@ -51,13 +53,16 @@ reponse body:
    "id":"int",
    "name":"string",
    "email":"string",
-   "submission":{
-      "id":"int",
-      "body":"string",
-      "solver_id":"int",
-      "language_id":"int",
-      "failed_test_case_id":"int"
-   }
+   "submission":
+   [
+      {
+         "id":"int",
+         "body":"string",
+         "solver_id":"int",
+         "language_id":"int",
+         "failed_test_case_id":"int"
+      }
+   ]
 }
 #Setter
 
@@ -90,13 +95,16 @@ reponse body:
       "id":"int",
       "name":"string",
       "email":"string",
-      "question":{
-         "id":"int",
-         "title":"string",
-         "body":"string",
-         "author_id":"int",
-         "level_id":"int"
-      }
+      "question":
+      [
+         {
+            "id":"int",
+            "title":"string",
+            "body":"string",
+            "author_id":"int",
+            "level_id":"int"
+         }
+      ]
    }
 ]
 
@@ -111,13 +119,16 @@ reponse body:
    "id":"int",
    "name":"string",
    "email":"string",
-   "question":{
-      "id":"int",
-      "title":"string",
-      "body":"string",
-      "author_id":"int",
-      "level_id":"int"
-   }
+   "question":
+   [
+      {
+         "id":"int",
+         "title":"string",
+         "body":"string",
+         "author_id":"int",
+         "level_id":"int"
+      }
+   ]
 }
 
 #admin
@@ -203,32 +214,45 @@ reponse body:
       "body":"string",
       "author_id":"int",
       "level_id":"int",
-      "solver":{
-         "id":"int",
-         "name":"string",
-         "email":"string"
-      },
-      "submission":{
-         "id":"int",
-         "body":"string",
-         "solver_id":"int",
-         "language_id":"int",
-         "failed_test_case_id":"int"
-      },
-      "level":{
-         "id":"int",
-         "body":"string"
-      },
-      "test_case":{
-         "id":"int",
-         "input":"string",
-         "output":"string",
-         "ques_id":"int"
-      },
-      "tag":{
+      "solver":
+      [
+         {
+            "id":"int",
+            "name":"string",
+            "email":"string"
+         }
+      ],
+      "submission":
+      [
+         {
+            "id":"int",
+            "body":"string",
+            "solver_id":"int",
+            "language_id":"int",
+            "failed_test_case_id":"int"
+         }
+      ],
+      "level":
+      {
          "id":"int",
          "body":"string"
-      }
+      },
+      "test_case":
+      [
+         {
+            "id":"int",
+            "input":"string",
+            "output":"string",
+            "ques_id":"int"
+         }
+      ],
+      "tag":
+      [
+         {
+            "id":"int",
+            "body":"string"
+         }
+      ]
    }
 ]
 
@@ -240,38 +264,42 @@ request body:
 
 reponse body:
 {
+   "id":"int",
+   "title":"string",
+   "body":"string",
+   "author_id":"int",
    "level_id":"int",
-   "solver":
-   {
-      "id":"int",
-      "name":"string",
-      "email":"string"
-   },
    "submission":
-   {
-      "id":"int",
-      "body":"string",
-      "solver_id":"int",
-      "language_id":"int",
-      "failed_test_case_id":"int"
-   },
+   [
+      {
+         "id":"int",
+         "body":"string",
+         "solver_id":"int",
+         "language_id":"int",
+         "failed_test_case_id":"int"
+      }
+   ],
    "level":
    {
       "id":"int",
       "body":"string"
    },
    "test_case":
-   {
-      "id":"int",
-      "input":"string",
-      "output":"string",
-      "ques_id":"int"
-   },
+   [
+      {
+         "id":"int",
+         "input":"string",
+         "output":"string",
+         "ques_id":"int"
+      }
+   ],
    "tag":
-   {
-      "id":"int",
-      "body":"string"
-   }
+   [
+      {
+         "id":"int",
+         "body":"string"
+      }
+   ]
 }
 
 get testcase by question id route: /questions/{question_id}/test_case
@@ -281,10 +309,12 @@ request body:
 {}
 
 reponse body:
-{
-   "id":"int",
-   "test_case_id":"int"
-}
+[
+   {
+      "id":"int",
+      "test_case_id":"int"
+   }
+]
 
 #language
 
@@ -313,13 +343,16 @@ reponse body:
    {
       "id":"int",
       "title":"string",
-      "submission":{
-         "id":"int",
-         "body":"string",
-         "solver_id":"int",
-         "language_id":"int",
-         "failed_test_case_id":"int"
-      }
+      "submission":
+      [
+         {
+            "id":"int",
+            "body":"string",
+            "solver_id":"int",
+            "language_id":"int",
+            "failed_test_case_id":"int"
+         }
+      ]
    }
 ]
 
@@ -333,13 +366,16 @@ reponse body:
 {
    "id":"int",
    "title":"string",
-   "submission":{
-      "id":"int",
-      "body":"string",
-      "solver_id":"int",
-      "language_id":"int",
-      "failed_test_case_id":"int"
-   }
+   "submission":
+   [
+      {
+         "id":"int",
+         "body":"string",
+         "solver_id":"int",
+         "language_id":"int",
+         "failed_test_case_id":"int"
+      }
+   ]
 }
 
 #tag
@@ -369,13 +405,16 @@ reponse body:
    {
       "id":"int",
       "title":"string",
-      "question":{
-         "id":"int",
-         "title":"string",
-         "body":"string",
-         "author_id":"int",
-         "level_id":"int"
-      }
+      "question":
+      [
+         {
+            "id":"int",
+            "title":"string",
+            "body":"string",
+            "author_id":"int",
+            "level_id":"int"
+         }
+      ]
    }
 ]
 
@@ -390,13 +429,15 @@ reponse body:
    "id":"int",
    "title":"string",
    "question":
-   {
-      "id":"int",
-      "title":"string",
-      "body":"string",
-      "author_id":"int",
-      "level_id":"int"
-   }
+   [
+      {
+         "id":"int",
+         "title":"string",
+         "body":"string",
+         "author_id":"int",
+         "level_id":"int"
+      }
+   ]
 }
 
 #question_tag
@@ -600,13 +641,15 @@ reponse body:
       "id":"int",
       "title":"string",
       "question":
-      {
-         "id":"int",
-         "title":"string",
-         "body":"string",
-         "author_id":"int",
-         "level_id":"int"
-      }
+      [
+         {
+            "id":"int",
+            "title":"string",
+            "body":"string",
+            "author_id":"int",
+            "level_id":"int"
+         }
+      ]
    }
 ]
 
@@ -621,11 +664,13 @@ reponse body:
    "id":"int",
    "title":"string",
    "question":
-   {
-      "id":"int",
-      "title":"string",
-      "body":"string",
-      "author_id":"int",
-      "level_id":"int"
-   }
+   [
+      {
+         "id":"int",
+         "title":"string",
+         "body":"string",
+         "author_id":"int",
+         "level_id":"int"
+      }
+   ]
 }
