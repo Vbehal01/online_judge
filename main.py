@@ -3,9 +3,14 @@ from sqlalchemy.orm import Session
 import model, schema, crud
 from database import engine, SessionLocal
 from auth import create_token, decode_token
+import logging
 
 from fastapi.security import OAuth2PasswordBearer
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"login")
+
+logging.basicConfig(filename="std.log",format='[%(asctime)s] {%(filename)s:%(lineno)d} %(levelname)s - %(message)s')
+logger=logging.getLogger()
+logger.setLevel(logging.INFO)
 
 
 model.Base.metadata.create_all(bind=engine)
@@ -48,13 +53,13 @@ def get_current_admins(db: Session = Depends(get_db), token: str = Depends(oauth
 
 @app.get("/admins/", response_model=list[schema.Admin])
 def read_admins(db: Session = Depends(get_db), current_admins: model.Admin = Depends(get_current_admins)):
-    print(f"{current_admins.name} is making the request")
+    logger.info(f"{current_admins.name} is making the request")
     return crud.get_admins(db)
 
 @app.get("/admins/{admin_id}", response_model=schema.Admin)
 def read_admin(admin_id: int, db: Session = Depends(get_db), current_admins: model.Admin = Depends(get_current_admins)):
     db_admin = crud.get_admin(db, admin_id=admin_id)
-    print(f"{current_admins.name} is making the request")
+    logger.info(f"{current_admins.name} is making the request")
     if db_admin is None:
         raise HTTPException(status_code=404, detail="User not found")
     return db_admin
@@ -88,13 +93,13 @@ def get_current_setter(db: Session = Depends(get_db), token: str = Depends(oauth
 
 @app.get("/setters/", response_model=list[schema.Setter])
 def read_setters(db: Session = Depends(get_db), current_setter: model.Setter = Depends(get_current_setter)):
-    print(f"{current_setter.name} is making the request")
+    logger.info(f"{current_setter.name} is making the request")
     return crud.get_setters(db)
 
 @app.get("/setters/{setter_id}", response_model=schema.Setter)
 def read_setter(setter_id: int, db: Session = Depends(get_db), current_setter: model.Setter = Depends(get_current_setter)):
     db_setter = crud.get_setter(db, setter_id=setter_id)
-    print(f"{current_setter.name} is making the request")
+    logger.info(f"{current_setter.name} is making the request")
     if db_setter is None:
         raise HTTPException(status_code=404, detail="User not found")
     return db_setter
@@ -128,13 +133,13 @@ def get_current_solver(db: Session = Depends(get_db), token: str = Depends(oauth
 
 @app.get("/solvers/", response_model=list[schema.Solver])
 def read_solvers(db: Session = Depends(get_db), current_solver: model.Solver = Depends(get_current_solver)):
-    print(f"{current_solver.name} is making the request")
+    logger.info(f"{current_solver.name} is making the request")
     return crud.get_solvers(db)
 
 @app.get("/solvers/{solver_id}", response_model=schema.Solver)
 def read_solver(solver_id: int, db: Session = Depends(get_db), current_solver: model.Solver = Depends(get_current_solver)):
     db_solver = crud.get_solver(db, solver_id=solver_id)
-    print(f"{current_solver.name} is making the request")
+    logger.info(f"{current_solver.name} is making the request")
     if db_solver is None:
         raise HTTPException(status_code=404, detail="User not found")
     return db_solver
