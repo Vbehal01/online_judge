@@ -6,11 +6,9 @@ from auth import create_token, decode_token
 import logging
 
 from fastapi.security import OAuth2PasswordBearer
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"login")
 
-logging.basicConfig(filename="std.log",format='[%(asctime)s] {%(filename)s:%(lineno)d} %(levelname)s - %(message)s')
-logger=logging.getLogger()
-logger.setLevel(logging.INFO)
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"login")
+logging.basicConfig(level=logging.DEBUG)
 
 
 model.Base.metadata.create_all(bind=engine)
@@ -33,7 +31,8 @@ def create_admin(admin: schema.AdminCreate, db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail="Email already registered")
     return crud.create_admin(db=db, admin=admin)
 
-#login
+
+# login
 @app.post("/login/admins/", response_model=schema.LoginAdminResponse)
 def login(login: schema.LoginAdmin, db: Session = Depends(get_db)):
     db_admins = crud.get_admin_by_email(db, email=login.email)
@@ -43,7 +42,10 @@ def login(login: schema.LoginAdmin, db: Session = Depends(get_db)):
         raise HTTPException(status_code=401, detail="username or password is incorrect")
     return {"token": create_token(db_admins.email)}
 
-def get_current_admins(db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)):
+
+def get_current_admins(
+    db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)
+):
     token_payload = decode_token(token)
     email = token_payload["email"]
     admins = crud.get_admin_by_email(db, email)
@@ -51,21 +53,30 @@ def get_current_admins(db: Session = Depends(get_db), token: str = Depends(oauth
         return admins
     raise HTTPException(status_code=401, detail="Unauthorized")
 
+
 @app.get("/admins/", response_model=list[schema.Admin])
-def read_admins(db: Session = Depends(get_db), current_admins: model.Admin = Depends(get_current_admins)):
-    logger.info(f"{current_admins.name} is making the request")
+def read_admins(
+    db: Session = Depends(get_db),
+    current_admins: model.Admin = Depends(get_current_admins),
+):
+    logging.debug(f" {current_admins.name} is making the request")
     return crud.get_admins(db)
 
+
 @app.get("/admins/{admin_id}", response_model=schema.Admin)
-def read_admin(admin_id: int, db: Session = Depends(get_db), current_admins: model.Admin = Depends(get_current_admins)):
+def read_admin(
+    admin_id: int,
+    db: Session = Depends(get_db),
+    current_admins: model.Admin = Depends(get_current_admins),
+):
     db_admin = crud.get_admin(db, admin_id=admin_id)
-    logger.info(f"{current_admins.name} is making the request")
+    logging.info(f" {current_admins.name} is making the request")
     if db_admin is None:
         raise HTTPException(status_code=404, detail="User not found")
     return db_admin
 
 
-#setter
+# setter
 @app.post("/signup/setters/", response_model=schema.Setter)
 def create_setter(setter: schema.SetterCreate, db: Session = Depends(get_db)):
     db_setter = crud.get_setter_by_email(db, email=setter.email)
@@ -73,7 +84,8 @@ def create_setter(setter: schema.SetterCreate, db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail="Email already registered")
     return crud.create_setter(db=db, setter=setter)
 
-#login
+
+# login
 @app.post("/login/setters/", response_model=schema.LoginSetterResponse)
 def login(login: schema.LoginSetter, db: Session = Depends(get_db)):
     db_setters = crud.get_setter_by_email(db, email=login.email)
@@ -83,7 +95,10 @@ def login(login: schema.LoginSetter, db: Session = Depends(get_db)):
         raise HTTPException(status_code=401, detail="username or password is incorrect")
     return {"token": create_token(db_setters.email)}
 
-def get_current_setter(db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)):
+
+def get_current_setter(
+    db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)
+):
     token_payload = decode_token(token)
     email = token_payload["email"]
     setters = crud.get_setter_by_email(db, email)
@@ -91,21 +106,30 @@ def get_current_setter(db: Session = Depends(get_db), token: str = Depends(oauth
         return setters
     raise HTTPException(status_code=401, detail="Unauthorized")
 
+
 @app.get("/setters/", response_model=list[schema.Setter])
-def read_setters(db: Session = Depends(get_db), current_setter: model.Setter = Depends(get_current_setter)):
-    logger.info(f"{current_setter.name} is making the request")
+def read_setters(
+    db: Session = Depends(get_db),
+    current_setter: model.Setter = Depends(get_current_setter),
+):
+    logging.info(f" {current_setter.name} is making the request")
     return crud.get_setters(db)
 
+
 @app.get("/setters/{setter_id}", response_model=schema.Setter)
-def read_setter(setter_id: int, db: Session = Depends(get_db), current_setter: model.Setter = Depends(get_current_setter)):
+def read_setter(
+    setter_id: int,
+    db: Session = Depends(get_db),
+    current_setter: model.Setter = Depends(get_current_setter),
+):
     db_setter = crud.get_setter(db, setter_id=setter_id)
-    logger.info(f"{current_setter.name} is making the request")
+    logging.info(f" {current_setter.name} is making the request")
     if db_setter is None:
         raise HTTPException(status_code=404, detail="User not found")
     return db_setter
 
 
-#solver
+# solver
 @app.post("/signup/solvers/", response_model=schema.Solver)
 def create_solver(solver: schema.SolverCreate, db: Session = Depends(get_db)):
     db_solver = crud.get_solver_by_email(db, email=solver.email)
@@ -113,7 +137,8 @@ def create_solver(solver: schema.SolverCreate, db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail="Email already registered")
     return crud.create_solver(db=db, solver=solver)
 
-#login
+
+# login
 @app.post("/login/solvers", response_model=schema.LoginSolverResponse)
 def login(login: schema.LoginSolver, db: Session = Depends(get_db)):
     db_solver = crud.get_solver_by_email(db, email=login.email)
@@ -123,7 +148,10 @@ def login(login: schema.LoginSolver, db: Session = Depends(get_db)):
         raise HTTPException(status_code=401, detail="username or password is incorrect")
     return {"token": create_token(db_solver.email)}
 
-def get_current_solver(db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)):
+
+def get_current_solver(
+    db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)
+):
     token_payload = decode_token(token)
     email = token_payload["email"]
     solver = crud.get_solver_by_email(db, email)
@@ -131,15 +159,24 @@ def get_current_solver(db: Session = Depends(get_db), token: str = Depends(oauth
         return solver
     raise HTTPException(status_code=401, detail="Unauthorized")
 
+
 @app.get("/solvers/", response_model=list[schema.Solver])
-def read_solvers(db: Session = Depends(get_db), current_solver: model.Solver = Depends(get_current_solver)):
-    logger.info(f"{current_solver.name} is making the request")
+def read_solvers(
+    db: Session = Depends(get_db),
+    current_solver: model.Solver = Depends(get_current_solver),
+):
+    logging.info(f" {current_solver.name} is making the request")
     return crud.get_solvers(db)
 
+
 @app.get("/solvers/{solver_id}", response_model=schema.Solver)
-def read_solver(solver_id: int, db: Session = Depends(get_db), current_solver: model.Solver = Depends(get_current_solver)):
+def read_solver(
+    solver_id: int,
+    db: Session = Depends(get_db),
+    current_solver: model.Solver = Depends(get_current_solver),
+):
     db_solver = crud.get_solver(db, solver_id=solver_id)
-    logger.info(f"{current_solver.name} is making the request")
+    logging.info(f" {current_solver.name} is making the request")
     if db_solver is None:
         raise HTTPException(status_code=404, detail="User not found")
     return db_solver
