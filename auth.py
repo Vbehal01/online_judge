@@ -5,7 +5,7 @@ import os
 load_dotenv()
 
 SECRET = os.environ['secret']
-ALGORITHM = 'HS256'
+ALGORITHM = os.environ['algorithm']
 # print(SECRET)
 
 def create_token(email: str):
