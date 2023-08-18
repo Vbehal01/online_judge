@@ -17,14 +17,15 @@ def get_admins(db: Session):
     return db.query(model.Admin).all()
 
 
-def create_admin(db: Session, admin: schema.AdminCreate):
+def create_admin(db: Session, admin: schema.UserCreate):
     db_admin = model.Admin(name=admin.name, email=admin.email, password=admin.password)
     db.add(db_admin)
     db.commit()
     db.refresh(db_admin)
     return db_admin
 
-#setter
+
+# setter
 def get_setter(db: Session, setter_id: int):
     return db.query(model.Setter).filter(model.Setter.id == setter_id).first()
 
@@ -37,14 +38,17 @@ def get_setters(db: Session):
     return db.query(model.Setter).all()
 
 
-def create_setter(db: Session, setter: schema.SetterCreate):
-    db_setter = model.Setter(name=setter.name, email=setter.email, password=setter.password)
+def create_setter(db: Session, setter: schema.UserCreate):
+    db_setter = model.Setter(
+        name=setter.name, email=setter.email, password=setter.password
+    )
     db.add(db_setter)
     db.commit()
     db.refresh(db_setter)
     return db_setter
 
-#solver
+
+# solver
 def get_solver(db: Session, solver_id: int):
     return db.query(model.Solver).filter(model.Solver.id == solver_id).first()
 
@@ -57,7 +61,7 @@ def get_solvers(db: Session):
     return db.query(model.Solver).all()
 
 
-def create_solver(db: Session, solver: schema.SolverCreate):
+def create_solver(db: Session, solver: schema.UserCreate):
     db_solver = model.Solver(name=solver.name, email=solver.email, password=solver.password)
     db.add(db_solver)
     db.commit()
