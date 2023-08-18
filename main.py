@@ -23,6 +23,53 @@ def get_db():
         db.close()
 
 
+# user
+@app.post("/signup/", response_model=schema.User)
+def create_user(user: schema.UserCreate, db: Session = Depends(get_db)):
+    if user.role == "Admin":
+        db_user = crud.get_admin_by_email(db, email=user.email)
+        if db_user:
+            raise HTTPException(status_code=400, detail="Email already registered")
+        return crud.create_admin(db=db, admin=user)
+
+    elif user.role == "Setter":
+        db_user = crud.get_setter_by_email(db, email=user.email)
+        if db_user:
+            raise HTTPException(status_code=400, detail="Email already registered")
+        return crud.create_setter(db=db, setter=user)
+
+    elif user.role == "Solver":
+        db_user = crud.get_solver_by_email(db, email=user.email)
+        if db_user:
+            raise HTTPException(status_code=400, detail="Email already registered")
+        return crud.create_solver(db=db, solver=user)
+
+    else:
+        raise HTTPException(status_code=400, detail="role must be admin, setter, solver")
+
+
+# login
+@app.post("/login/admins/", response_model=schema.LoginAdminResponse)
+def login(login: schema.LoginAdmin, db: Session = Depends(get_db)):
+    db_admins = crud.get_admin_by_email(db, role=login.role, email=login.email)
+    if not db_admins:
+        raise HTTPException(status_code=401, detail="username or password is incorrect")
+    if db_admins.password != login.password:
+        raise HTTPException(status_code=401, detail="username or password is incorrect")
+    return {"token": create_token(db_admins.email, db_admins.role)}
+
+
+def get_current_admins(
+    db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)
+):
+    token_payload = decode_token(token)
+    email = token_payload["email"]
+    admins = crud.get_admin_by_email(db, email)
+    if admins:
+        return admins
+    raise HTTPException(status_code=401, detail="Unauthorized")
+
+
 # admin
 @app.post("/signup/admins/", response_model=schema.Admin)
 def create_admin(admin: schema.AdminCreate, db: Session = Depends(get_db)):
@@ -35,12 +82,12 @@ def create_admin(admin: schema.AdminCreate, db: Session = Depends(get_db)):
 # login
 @app.post("/login/admins/", response_model=schema.LoginAdminResponse)
 def login(login: schema.LoginAdmin, db: Session = Depends(get_db)):
-    db_admins = crud.get_admin_by_email(db, email=login.email)
+    db_admins = crud.get_admin_by_email(db, role=login.role, email=login.email)
     if not db_admins:
         raise HTTPException(status_code=401, detail="username or password is incorrect")
     if db_admins.password != login.password:
         raise HTTPException(status_code=401, detail="username or password is incorrect")
-    return {"token": create_token(db_admins.email)}
+    return {"token": create_token(db_admins.email, db_admins.role)}
 
 
 def get_current_admins(
