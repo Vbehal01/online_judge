@@ -19,7 +19,7 @@ class Setter(Base):
     name = Column(String)
     email = Column(String)
     password = Column(String, nullable=False)
-    # questions = relationship("Question", back_populates="setters", lazy="selectin")
+    questions = relationship("Question", back_populates="setter", lazy="selectin")
 
 class Admin(Base):
     __tablename__ = "admins"
@@ -37,39 +37,39 @@ class Language(Base):
     title = Column(String)
 #     submissions = relationship("Submission", back_populates="languages", lazy="selectin")
 
-# class Level(Base):
-#     __tablename__ = "levels"
+class Level(Base):
+    __tablename__ = "levels"
 
-#     id = Column(Integer, primary_key=True, autoincrement=True)
-#     title = Column(String)
-#     questions = relationship("Question", back_populates="levels", lazy="selectin")
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    title = Column(String)
+    questions = relationship("Question", back_populates="level", lazy="selectin")
 
-# class Question(Base):
-#     __tablename__ = "questions"
+class Question(Base):
+    __tablename__ = "questions"
 
-#     id = Column(Integer, primary_key=True, autoincrement=True)
-#     title = Column(String)
-#     body = Column(String)
-#     author_id = Column(Integer, ForeignKey(Setter.id))
-#     level_id = Column(Integer, ForeignKey(Level.id))
-#     setters = relationship("Setter", back_populates="questions", lazy="selectin")
-#     levels = relationship("Level", back_populates="questions", lazy="selectin")
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    title = Column(String)
+    body = Column(String)
+    author_id = Column(Integer, ForeignKey(Setter.id))
+    level_id = Column(Integer, ForeignKey(Level.id))
+    setter = relationship("Setter", back_populates="questions", lazy="selectin")
+    level = relationship("Level", back_populates="questions", lazy="selectin")
 #     questions = relationship("Submission", back_populates="submissions", lazy="selectin")
-#     tags = relationship("Tag", secondary="question_tag", back_populates="questions", lazy="selectin")
+    tags = relationship("Tag", secondary="question_tag", back_populates="questions", lazy="selectin")
 #     test_cases = relationship("TestCase", back_populates="questions", lazy="selectin")
 
-# class Tag(Base):
-#     __tablename__ = "tags"
+class Tag(Base):
+    __tablename__ = "tags"
 
-#     id = Column(Integer, primary_key=True, autoincrement=True)
-#     title = Column(String)
-#     questions = relationship("Questions",secondary="question_tag",back_populates="question_tags",lazy="selectin")
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    title = Column(String)
+    questions = relationship("Questions",secondary="question_tag",back_populates="question_tags",lazy="selectin")
 
-# class QuestionTag(Base):
-#     __tablename__ = "question_tag"
+class QuestionTag(Base):
+    __tablename__ = "question_tag"
 
-#     question_id = Column(Integer, ForeignKey(Question.id), primary_key=True)
-#     tag_id = Column(Integer, ForeignKey(Tag.id), primary_key=True)
+    question_id = Column(Integer, ForeignKey(Question.id), primary_key=True)
+    tag_id = Column(Integer, ForeignKey(Tag.id), primary_key=True)
 
 # class TestCase(Base):
 #     __tablename__ = "test_cases"

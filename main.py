@@ -125,13 +125,13 @@ def read_admin(admin_id: int, db: Session = Depends(get_db), current_user: model
 
 
 # setter
-@app.get("/setters/", response_model=list[schema.User])
+@app.get("/setters/", response_model=list[schema.Setter_with_relation])
 def read_setters(db: Session = Depends(get_db), current_user: model.Setter = Depends(get_current_user)):
     logging.info(f" {current_user.name} is making the request")
     return crud.get_setters(db)
 
 
-@app.get("/setters/{setter_id}", response_model=schema.User)
+@app.get("/setters/{setter_id}", response_model=schema.Setter_with_relation)
 def read_setter(setter_id: int, db: Session = Depends(get_db), current_user: model.Setter = Depends(get_current_user)):
     db_setter = crud.get_setter(db, setter_id=setter_id)
     logging.info(f" {current_user.name} is making the request")
@@ -158,8 +158,86 @@ def read_solver(solver_id: int, db: Session = Depends(get_db), current_user: mod
 
 #language
 @app.post("/languages/", response_model=schema.Language)
-def create_langauge(language: schema.LangaugeCreate, db: Session = Depends(get_db), current_user: model.Language = Depends(get_current_user)):
+def create_langauge(language: schema.LanguageCreate, db: Session = Depends(get_db), current_user: model.Language = Depends(get_current_user)):
     logging.info(f" {current_user.name} is making the request")
-    user= crud.create_language(db=db, langauge=language)
-    print(user.__dict__)
-    return user
+    return crud.create_language(db=db, language=language)
+
+@app.get("/languages/", response_model=list[schema.Language])
+def read_languages(db: Session = Depends(get_db), current_user: model.Language = Depends(get_current_user)):
+    logging.info(f" {current_user.name} is making the request")
+    return crud.get_languages(db)
+
+@app.get("/languages/{language_id}", response_model=schema.Language)
+def read_language(language_id: int, db: Session = Depends(get_db), current_user: model.Language = Depends(get_current_user),):
+    db_language = crud.get_language_by_id(db, language_id=language_id)
+    logging.info(f" {current_user.name} is making the request")
+    if db_language is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    return db_language
+
+
+#level
+@app.post("/levels/", response_model=schema.Level)
+def create_level(level: schema.LevelCreate, db: Session = Depends(get_db), current_user: model.Level = Depends(get_current_user)):
+    logging.info(f" {current_user.name} is making the request")
+    return crud.create_level(db=db, level=level)
+
+@app.get("/levels/", response_model=list[schema.level_with_relation])
+def read_levels(db: Session = Depends(get_db), current_user: model.Level = Depends(get_current_user)):
+    logging.info(f" {current_user.name} is making the request")
+    return crud.get_levels(db)
+
+@app.get("/levels/{level_id}", response_model=schema.level_with_relation)
+def read_level(level_id: int, db: Session = Depends(get_db), current_user: model.Level = Depends(get_current_user),):
+    db_level = crud.get_level_by_id(db, level_id=level_id)
+    logging.info(f" {current_user.name} is making the request")
+    if db_level is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    return db_level
+
+
+#question
+@app.post("/questions/", response_model=schema.Question)
+def create_question(question: schema.QuestionCreate, db: Session = Depends(get_db), current_user: model.Question = Depends(get_current_user)):
+    logging.info(f" {current_user.name} is making the request")
+    return crud.create_question(db=db, question=question, author_id=current_user.id)
+
+@app.get("/questions/", response_model=list[schema.question_with_relation])
+def read_questions(db: Session = Depends(get_db), current_user: model.Question = Depends(get_current_user)):
+    logging.info(f" {current_user.name} is making the request")
+    return crud.get_questions(db)
+
+@app.get("/questions/{question_id}", response_model=schema.question_with_relation)
+def read_question(question_id: int, db: Session = Depends(get_db), current_user: model.Question = Depends(get_current_user),):
+    db_question = crud.get_question_by_id(db, question_id=question_id)
+    logging.info(f" {current_user.name} is making the request")
+    if db_question is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    return db_question
+
+
+#tag
+@app.post("/tags/", response_model=schema.Tag)
+def create_tag(tag: schema.TagCreate, db: Session = Depends(get_db), current_user: model.Tag = Depends(get_current_user)):
+    logging.info(f" {current_user.name} is making the request")
+    return crud.create_tag(db=db, tag=tag)
+
+@app.get("/tags/", response_model=list[schema.tag_with_relation])
+def read_tags(db: Session = Depends(get_db), current_user: model.Tag = Depends(get_current_user)):
+    logging.info(f" {current_user.name} is making the request")
+    return crud.get_tags(db)
+
+@app.get("/tags/{tag_id}", response_model=schema.tag_with_relation)
+def read_tag(tag_id: int, db: Session = Depends(get_db), current_user: model.Tag = Depends(get_current_user),):
+    db_tag = crud.get_tag_by_id(db, tag_id=tag_id)
+    logging.info(f" {current_user.name} is making the request")
+    if db_tag is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    return db_tag
+
+
+#questiontag
+@app.post("/tags/question/{question_id}", response_model=schema.QuestionTag)
+def create_question_tag(question_id: int, question_tag: schema.QuestionTagCreate, db: Session = Depends(get_db), current_user: model.QuestionTag = Depends(get_current_user)):
+    logging.info(f" {current_user.name} is making the request")
+    return crud.create_question_tag(db=db, question_tag=question_tag, question_id=question_id)
