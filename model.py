@@ -30,11 +30,11 @@ class Admin(Base):
     password = Column(String, nullable=False)
 
 
-# class Language(Base):
-#     __tablename__ = "languages"
+class Language(Base):
+    __tablename__ = "languages"
 
-#     id = Column(Integer, primary_key=True, autoincrement=True)
-#     title = Column(String)
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    title = Column(String)
 #     submissions = relationship("Submission", back_populates="languages", lazy="selectin")
 
 # class Level(Base):

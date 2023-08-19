@@ -31,3 +31,17 @@ class Login(BaseModel):
 
 class LoginResponse(BaseModel):
     token: str
+
+
+#language
+class LanguageBase(BaseModel):
+    title: str
+
+class LangaugeCreate(LanguageBase):
+    pass
+
+class Language(LanguageBase):
+    id: int
+    
+    class Config:
+        orm_mode = True

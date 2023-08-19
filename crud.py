@@ -1,6 +1,4 @@
-from sqlalchemy.orm import Session, joinedload
-from sqlalchemy import update
-from fastapi import HTTPException
+from sqlalchemy.orm import Session
 import model, schema
 
 
@@ -67,3 +65,13 @@ def create_solver(db: Session, solver: schema.UserCreate):
     db.commit()
     db.refresh(db_solver)
     return db_solver
+
+
+#language
+def create_language(db: Session, langauge: schema.LangaugeCreate):
+    db_language = model.Language(title=langauge.title)
+    print(db_language.__dict__)
+    db.add(db_language)
+    db.commit()
+    db.refresh(db_language)
+    return db_language
