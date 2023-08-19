@@ -107,16 +107,16 @@ class QuestionTag(QuestionTagBase):
 
 
 #relations
-class Setter_with_relation(User):
+class SetterRelation(User):
     questions: list[Question]
 
-class question_with_relation(Question):
+class QuestionRelation(Question):
     setter: User
     level: Level
     tags: list[Tag]
 
-class level_with_relation(Level):
+class LevelRelation(Level):
     questions: list[Question]
 
-class tag_with_relation(Tag):
+class TagRelation(Tag):
     questions: list[Question]
