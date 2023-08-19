@@ -119,4 +119,4 @@ class level_with_relation(Level):
     questions: list[Question]
 
 class tag_with_relation(Tag):
-    questions= list[Question]
+    questions: list[Question]

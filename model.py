@@ -63,7 +63,7 @@ class Tag(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     title = Column(String)
-    questions = relationship("Questions",secondary="question_tag",back_populates="question_tags",lazy="selectin")
+    questions = relationship("Question",secondary="question_tag",back_populates="tags",lazy="selectin")
 
 class QuestionTag(Base):
     __tablename__ = "question_tag"
