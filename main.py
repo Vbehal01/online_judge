@@ -125,13 +125,13 @@ def read_admin(admin_id: int, db: Session = Depends(get_db), current_user: model
 
 
 # setter
-@app.get("/setters/", response_model=list[schema.Setter_with_relation])
+@app.get("/setters/", response_model=list[schema.SetterRelation])
 def read_setters(db: Session = Depends(get_db), current_user: model.Setter = Depends(get_current_user)):
     logging.info(f" {current_user.name} is making the request")
     return crud.get_setters(db)
 
 
-@app.get("/setters/{setter_id}", response_model=schema.Setter_with_relation)
+@app.get("/setters/{setter_id}", response_model=schema.SetterRelation)
 def read_setter(setter_id: int, db: Session = Depends(get_db), current_user: model.Setter = Depends(get_current_user)):
     db_setter = crud.get_setter(db, setter_id=setter_id)
     logging.info(f" {current_user.name} is making the request")
@@ -182,12 +182,12 @@ def create_level(level: schema.LevelCreate, db: Session = Depends(get_db), curre
     logging.info(f" {current_user.name} is making the request")
     return crud.create_level(db=db, level=level)
 
-@app.get("/levels/", response_model=list[schema.level_with_relation])
+@app.get("/levels/", response_model=list[schema.LevelRelation])
 def read_levels(db: Session = Depends(get_db), current_user: model.Level = Depends(get_current_user)):
     logging.info(f" {current_user.name} is making the request")
     return crud.get_levels(db)
 
-@app.get("/levels/{level_id}", response_model=schema.level_with_relation)
+@app.get("/levels/{level_id}", response_model=schema.LevelRelation)
 def read_level(level_id: int, db: Session = Depends(get_db), current_user: model.Level = Depends(get_current_user),):
     db_level = crud.get_level_by_id(db, level_id=level_id)
     logging.info(f" {current_user.name} is making the request")
@@ -202,12 +202,12 @@ def create_question(question: schema.QuestionCreate, db: Session = Depends(get_d
     logging.info(f" {current_user.name} is making the request")
     return crud.create_question(db=db, question=question, author_id=current_user.id)
 
-@app.get("/questions/", response_model=list[schema.question_with_relation])
+@app.get("/questions/", response_model=list[schema.QuestionRelation])
 def read_questions(db: Session = Depends(get_db), current_user: model.Question = Depends(get_current_user)):
     logging.info(f" {current_user.name} is making the request")
     return crud.get_questions(db)
 
-@app.get("/questions/{question_id}", response_model=schema.question_with_relation)
+@app.get("/questions/{question_id}", response_model=schema.QuestionRelation)
 def read_question(question_id: int, db: Session = Depends(get_db), current_user: model.Question = Depends(get_current_user),):
     db_question = crud.get_question_by_id(db, question_id=question_id)
     logging.info(f" {current_user.name} is making the request")
@@ -222,12 +222,12 @@ def create_tag(tag: schema.TagCreate, db: Session = Depends(get_db), current_use
     logging.info(f" {current_user.name} is making the request")
     return crud.create_tag(db=db, tag=tag)
 
-@app.get("/tags/", response_model=list[schema.tag_with_relation])
+@app.get("/tags/", response_model=list[schema.TagRelation])
 def read_tags(db: Session = Depends(get_db), current_user: model.Tag = Depends(get_current_user)):
     logging.info(f" {current_user.name} is making the request")
     return crud.get_tags(db)
 
-@app.get("/tags/{tag_id}", response_model=schema.tag_with_relation)
+@app.get("/tags/{tag_id}", response_model=schema.TagRelation)
 def read_tag(tag_id: int, db: Session = Depends(get_db), current_user: model.Tag = Depends(get_current_user),):
     db_tag = crud.get_tag_by_id(db, tag_id=tag_id)
     logging.info(f" {current_user.name} is making the request")
@@ -241,3 +241,23 @@ def read_tag(tag_id: int, db: Session = Depends(get_db), current_user: model.Tag
 def create_question_tag(question_id: int, question_tag: schema.QuestionTagCreate, db: Session = Depends(get_db), current_user: model.QuestionTag = Depends(get_current_user)):
     logging.info(f" {current_user.name} is making the request")
     return crud.create_question_tag(db=db, question_tag=question_tag, question_id=question_id)
+
+
+#testcase
+@app.post("/testcases/{question_id}", response_model=schema.TestCase)
+def create_testcase(question_id: int, testcase: schema.TestCaseCreate, db: Session = Depends(get_db), current_user: model.TestCase = Depends(get_current_user)):
+    logging.info(f" {current_user.name} is making the request")
+    return crud.create_testcase(db=db, testcase=testcase, question_id=question_id)
+
+@app.get("/testcases/", response_model=list[schema.TestCaseRelation])
+def read_testcases(db: Session = Depends(get_db), current_user: model.TestCase = Depends(get_current_user)):
+    logging.info(f" {current_user.name} is making the request")
+    return crud.get_testcases(db)
+
+@app.get("/testcases/{test_case_id}", response_model=schema.TestCaseRelation)
+def read_testcase(test_case_id: int, db: Session = Depends(get_db), current_user: model.TestCase = Depends(get_current_user),):
+    db_test_case = crud.get_test_case_by_id(db, test_case_id=test_case_id)
+    logging.info(f" {current_user.name} is making the request")
+    if db_test_case is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    return db_test_case

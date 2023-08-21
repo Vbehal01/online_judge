@@ -138,3 +138,18 @@ def create_question_tag(db: Session, question_tag: schema.QuestionTagCreate, que
     db.commit()
     db.refresh(db_question_tag)
     return db_question_tag
+
+
+#testcase
+def create_testcase(db: Session, testcase: schema.TestCaseCreate, question_id: int):
+    db_testcase = model.TestCase(input=testcase.input, output=testcase.output, question_id=question_id)
+    db.add(db_testcase)
+    db.commit()
+    db.refresh(db_testcase)
+    return db_testcase
+
+def get_testcases(db: Session):
+    return db.query(model.TestCase).all()
+
+def get_test_case_by_id(db: Session, test_case_id: int):
+    return db.query(model.TestCase).filter(model.TestCase.id == test_case_id).first()
