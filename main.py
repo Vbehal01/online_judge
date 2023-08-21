@@ -244,7 +244,7 @@ def create_question_tag(question_id: int, question_tag: schema.QuestionTagCreate
 
 
 #testcase
-@app.post("/testcases/{question_id}", response_model=schema.TestCase)
+@app.post("/questions/{question_id}/testcases", response_model=schema.TestCase)
 def create_testcase(question_id: int, testcase: schema.TestCaseCreate, db: Session = Depends(get_db), current_user: model.TestCase = Depends(get_current_user)):
     logging.info(f" {current_user.name} is making the request")
     return crud.create_testcase(db=db, testcase=testcase, question_id=question_id)
