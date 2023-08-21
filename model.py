@@ -56,7 +56,7 @@ class Question(Base):
     level = relationship("Level", back_populates="questions", lazy="selectin")
 #     questions = relationship("Submission", back_populates="submissions", lazy="selectin")
     tags = relationship("Tag", secondary="question_tag", back_populates="questions", lazy="selectin")
-#     test_cases = relationship("TestCase", back_populates="questions", lazy="selectin")
+    test_cases = relationship("TestCase", back_populates="questions", lazy="selectin")
 
 class Tag(Base):
     __tablename__ = "tags"
@@ -71,14 +71,14 @@ class QuestionTag(Base):
     question_id = Column(Integer, ForeignKey(Question.id), primary_key=True)
     tag_id = Column(Integer, ForeignKey(Tag.id), primary_key=True)
 
-# class TestCase(Base):
-#     __tablename__ = "test_cases"
+class TestCase(Base):
+    __tablename__ = "test_cases"
 
-#     id = Column(Integer, primary_key=True, autoincrement=True)
-#     input = Column(String)
-#     output = Column(String)
-#     question_id = Column(Integer, ForeignKey(Question.id))
-#     questions = relationship("Question", back_populates="test_cases", lazy="selectin")
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    input = Column(String)
+    output = Column(String)
+    question_id = Column(Integer, ForeignKey(Question.id))
+    questions = relationship("Question", back_populates="test_cases", lazy="selectin")
 
 # class Submission(Base):
 #     __tablename__ = "submissions"

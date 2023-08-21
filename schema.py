@@ -106,6 +106,22 @@ class QuestionTag(QuestionTagBase):
         orm_mode = True
 
 
+#testcase
+class TestCaseBase(BaseModel):
+    input: str
+    output: str
+
+class TestCaseCreate(TestCaseBase):
+    pass
+
+class TestCase(TestCaseBase):
+    id: int
+    question_id: int
+    
+    class Config:
+        orm_mode = True
+
+
 #relations
 class SetterRelation(User):
     questions: list[Question]
@@ -114,9 +130,13 @@ class QuestionRelation(Question):
     setter: User
     level: Level
     tags: list[Tag]
+    test_cases: list[TestCase]
 
 class LevelRelation(Level):
     questions: list[Question]
 
 class TagRelation(Tag):
     questions: list[Question]
+
+class TestCaseRelation(Tag):
+    questions: Question
