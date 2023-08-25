@@ -5,9 +5,10 @@ method post:
 
 request body:
 {
-    "body": str,
-    "test_case_id": int
+    "code": str,
+    "test_case_input": str
 }
+
 response body:
 {
     "output": str

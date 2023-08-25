@@ -2,6 +2,7 @@ from pydantic import BaseModel
 from fastapi import FastAPI, HTTPException
 import subprocess
 import os
+import uvicorn
 
 #language
 class EvaluationCreate(BaseModel):
@@ -31,51 +32,8 @@ def evaluation(eval: EvaluationCreate):
         
     except subprocess.CalledProcessError as e:
         raise HTTPException(status_code=500, detail=str(e))
+    
+DEFAULT_PORT = 8080
 
-    # finally:
-    #     os.remove("user_script.py")
-
-# r'"D:\Learning\Vansh\online_judge\evaluation\user_script.py"'
-# "D:\\Learning\\Vansh\\online_judge\\evaluation\\user_script.py"
-
-# os.path.join("D:","learning","Vansh","online_judge","evaluation","user_script.py")
-
-# from fastapi import FastAPI, HTTPException
-# from pydantic import BaseModel
-# import subprocess
-
-# app = FastAPI()
-
-# class CodeRequest(BaseModel):
-#     code: str
-#     arguments: list
-
-# @app.post("/evaluation/")
-# async def execute_code(code_request: CodeRequest):
-#     # Write the received code to a Python file
-#     code_file_path = "dynamic_code.py"
-#     with open(code_file_path, 'w') as code_file:
-#         code_file.write(code_request.code)
-
-#         print(code_request.arguments)
-
-#     try:
-#         # Execute the Python file with the provided arguments
-#         process = subprocess.Popen(
-#             [echo code_request.arguments | "python" code_file_path]
-#             stdout=subprocess.PIPE,
-#             stderr=subprocess.PIPE,
-#             text=True
-#         )
-#         stdout, stderr = process.communicate()
-
-#         # Check if the execution was successful
-#         if process.returncode == 0:
-#             return {"output": stdout}
-#         else:
-#             raise HTTPException(status_code=500, detail=f"Error executing code:\n{stderr}")
-#     except Exception as e:
-#         raise HTTPException(status_code=500, detail=str(e))
-#     # finally:
-#     #     # Clean up the temporary code file
-#     #     subprocess.run(["rm", code_file_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=DEFAULT_PORT)

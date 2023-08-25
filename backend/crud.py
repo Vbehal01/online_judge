@@ -1,5 +1,7 @@
 from sqlalchemy.orm import Session
 import model, schema
+import requests
+from sqlalchemy import update
 
 
 # admin
@@ -155,19 +157,42 @@ def get_test_case_by_id(db: Session, test_case_id: int):
     return db.query(model.TestCase).filter(model.TestCase.id == test_case_id).first()
 
 
-#submission
-def create_submission(db: Session, submission: schema.Submission, solver_id: str):
-    db_submission = model.Submission(code=submission.code, solver_id=solver_id, language_id=submission.language_id, question_id=submission.question_id)
-    db.add(db_submission)
-    db.commit()
-    db.refresh(db_submission)
-    return db_submission
-
 def get_submissions(db: Session):
     return db.query(model.Submission).all()
 
 def get_submision_by_id(db: Session, submission_id: int):
     return db.query(model.Submission).filter(model.Submission.id == submission_id).first()
 
-# def get_code(db: Session, submission):
+def update_submission_status(submission: schema.Submission,test_case_id: int, id: int, db: Session):
+    submission = get_submision_by_id(db,id)
+    
+    if submission.status == "Accepted":
+        submission.status = "wrong"
+        db.commit()
 
+    if submission.failed_test_case_id == 0:
+        submission.failed_test_case_id = test_case_id
+        db.commit()
+    
+    return
+
+def create_submission(db: Session, submission: schema.Submission, solver_id: str):
+    db_submission = model.Submission(code=submission.code, solver_id=solver_id, language_id=submission.language_id, question_id=submission.question_id)
+    db_question=get_question_by_id(db, submission.question_id)
+    input=db_question.test_cases.input
+    print(input)
+    expected_output=db_question.test_cases.output
+    print(expected_output)
+    test_case_id=db_question.test_cases.id
+    url='http://127.0.0.1:8080/evaluation'
+    myobj={'code': submission.code, 'test_case_input': input}
+    eval=requests.post(url, json=myobj)
+    eval=eval.json()
+    db.add(db_submission)
+    db.commit()
+    db.refresh(db_submission)
+    if(eval["output"]!=expected_output):
+        update_submission_status(db, id, test_case_id)
+        db.commit
+
+    return db_submission
