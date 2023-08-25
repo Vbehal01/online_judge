@@ -23,7 +23,7 @@ def evaluation(eval: EvaluationCreate):
 
         
     try:
-        output = subprocess.check_output(["echo", eval.test_case_input, "|", "python", "D:\\Learning\\Vansh\\online_judge\\evaluation\\user_script.py"], stderr=subprocess.STDOUT, text=True, shell=True).rstrip('\n')
+        output = subprocess.check_output(["echo", eval.test_case_input, "|", "python", "D:\\Learning\\online_judge\\evaluation\\user_script.py"], stderr=subprocess.STDOUT, text=True, shell=True).rstrip('\n')
         if output:
             return {"input":eval.test_case_input,
                     "output": output}
@@ -32,8 +32,3 @@ def evaluation(eval: EvaluationCreate):
         
     except subprocess.CalledProcessError as e:
         raise HTTPException(status_code=500, detail=str(e))
-    
-DEFAULT_PORT = 8080
-
-if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=DEFAULT_PORT)
