@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 from fastapi import FastAPI, HTTPException
 import subprocess
+import os
 import uvicorn
 
 #language
@@ -16,7 +17,6 @@ app=FastAPI()
 
 @app.post("/evaluation/")
 def evaluation(eval: EvaluationCreate):
-    print("message",eval)
     script_filename = "user_script.py"
     with open(script_filename, 'w') as script_file:
         script_file.write(eval.code)

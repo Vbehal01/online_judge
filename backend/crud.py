@@ -157,7 +157,6 @@ def get_test_case_by_id(db: Session, test_case_id: int):
     return db.query(model.TestCase).filter(model.TestCase.id == test_case_id).first()
 
 
-#submission
 def get_submissions(db: Session):
     return db.query(model.Submission).all()
 
