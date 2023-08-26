@@ -2,7 +2,12 @@ from pydantic import BaseModel
 from fastapi import FastAPI, HTTPException
 import subprocess
 import os
+from datetime import datetime
 import uvicorn
+
+def generate_unique_filename():
+    current_time = datetime.now().strftime("%Y%m%d%H%M%S")
+    return f"dynamic_code_{current_time}.py"
 
 #language
 class EvaluationCreate(BaseModel):
@@ -17,7 +22,7 @@ app=FastAPI()
 
 @app.post("/evaluation/")
 def evaluation(eval: EvaluationCreate):
-    script_filename = "user_script.py"
+    script_filename = generate_unique_filename()
     with open(script_filename, 'w') as script_file:
         script_file.write(eval.code)
     
