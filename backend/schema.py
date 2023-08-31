@@ -145,11 +145,15 @@ class Submission(SubmissionBase):
 class SetterRelation(User):
     questions: list[Question]
 
+class SolverRelation(User):
+    submissions: list[Submission]
+
 class QuestionRelation(Question):
     setter: User
     level: Level
     tags: list[Tag]
     test_cases: list[TestCase]
+    submissions: list[Submission]
 
 class LevelRelation(Level):
     questions: list[Question]
@@ -159,3 +163,11 @@ class TagRelation(Tag):
 
 class TestCaseRelation(Tag):
     questions: Question
+
+class SubmissionRelation(Submission):
+    solver: User
+    languages: Language
+    question: Question
+
+class LanguageRelation(Tag):
+    submissions: list[Submission]
