@@ -7,8 +7,8 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
-      - name: Check out repository code
+      - name: Build docker image and push to docker hub
         run: |
           cd backend
-          docker build -t online_judge:backend .
+          docker build -t vanshbehal01/online_judge:backend .
           docker push vanshbehal01/online_judge:backend
