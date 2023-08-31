@@ -172,7 +172,7 @@ def read_language(language_id: int, db: Session = Depends(get_db), current_user:
     db_language = crud.get_language_by_id(db, language_id=language_id)
     logging.info(f" {current_user.name} is making the request")
     if db_language is None:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise HTTPException(status_code=404, detail="Language not found")
     return db_language
 
 
@@ -192,7 +192,7 @@ def read_level(level_id: int, db: Session = Depends(get_db), current_user: model
     db_level = crud.get_level_by_id(db, level_id=level_id)
     logging.info(f" {current_user.name} is making the request")
     if db_level is None:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise HTTPException(status_code=404, detail="Level not found")
     return db_level
 
 
@@ -212,7 +212,7 @@ def read_question(question_id: int, db: Session = Depends(get_db), current_user:
     db_question = crud.get_question_by_id(db, question_id=question_id)
     logging.info(f" {current_user.name} is making the request")
     if db_question is None:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise HTTPException(status_code=404, detail="Question not found")
     return db_question
 
 
@@ -232,7 +232,7 @@ def read_tag(tag_id: int, db: Session = Depends(get_db), current_user: model.Tag
     db_tag = crud.get_tag_by_id(db, tag_id=tag_id)
     logging.info(f" {current_user.name} is making the request")
     if db_tag is None:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise HTTPException(status_code=404, detail="Tag not found")
     return db_tag
 
 
@@ -259,7 +259,7 @@ def read_testcase(test_case_id: int, db: Session = Depends(get_db), current_user
     db_test_case = crud.get_test_case_by_id(db, test_case_id=test_case_id)
     logging.info(f" {current_user.name} is making the request")
     if db_test_case is None:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise HTTPException(status_code=404, detail="Test case not found")
     return db_test_case
 
 
@@ -268,4 +268,17 @@ def read_testcase(test_case_id: int, db: Session = Depends(get_db), current_user
 def create_submission(submission: schema.SubmissionCreate, db: Session = Depends(get_db), current_user: model.Submission = Depends(get_current_user)):
     logging.info(f" {current_user.name} is making the request")
     db_submission = crud.create_submission(db=db, submission=submission, solver_id=current_user.id)
+    return db_submission
+
+@app.get("/submissions/", response_model=list[schema.SubmissionRelation])
+def read_submissions(db: Session = Depends(get_db), current_user: model.Submission = Depends(get_current_user)):
+    logging.info(f" {current_user.name} is making the request")
+    return crud.get_submissions(db)
+
+@app.get("/submissions/{submission_id}", response_model=schema.SubmissionRelation)
+def read_submission(submission_id: int, db: Session = Depends(get_db), current_user: model.Submission = Depends(get_current_user),):
+    db_submission = crud.get_submission_by_id(db, submission_id=submission_id)
+    logging.info(f" {current_user.name} is making the request")
+    if db_submission is None:
+        raise HTTPException(status_code=404, detail="Submission not found")
     return db_submission
