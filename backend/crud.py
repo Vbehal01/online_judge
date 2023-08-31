@@ -160,11 +160,11 @@ def get_test_case_by_id(db: Session, test_case_id: int):
 def get_submissions(db: Session):
     return db.query(model.Submission).all()
 
-def get_submision_by_id(db: Session, submission_id: int):
+def get_submission_by_id(db: Session, submission_id: int):
     return db.query(model.Submission).filter(model.Submission.id == submission_id).first()
 
 def update_submission_status_to_wrong(db:Session, id: int, test_case_id: int):
-    submission = get_submision_by_id(db,id)
+    submission = get_submission_by_id(db,id)
     
     if submission.status == "Accepted":
         submission.status = "wrong"
@@ -188,7 +188,7 @@ def create_submission(db: Session, submission: schema.Submission, solver_id: str
         expected_output=test_case.output
         print(expected_output)
         test_case_id=test_case.id
-        url='http://127.0.0.1:8080/evaluation'
+        url='http://0.0.0.0:8080/evaluation'
         myobj={'code': submission.code, 'test_case_input': input}
         eval=requests.post(url, json=myobj)
         eval=eval.json()
