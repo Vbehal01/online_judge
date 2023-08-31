@@ -10,7 +10,7 @@ class Solver(Base):
     name = Column(String)
     email = Column(String)
     password = Column(String, nullable=False)
-    # submissions = relationship("Submission", back_populates="solvers", lazy="selectin")
+    submissions = relationship("Submission", back_populates="solver", lazy="selectin")
 
 class Setter(Base):
     __tablename__ = "setters"
@@ -35,7 +35,7 @@ class Language(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     title = Column(String)
-#     submissions = relationship("Submission", back_populates="languages", lazy="selectin")
+    submissions = relationship("Submission", back_populates="languages", lazy="selectin")
 
 class Level(Base):
     __tablename__ = "levels"
@@ -54,7 +54,7 @@ class Question(Base):
     level_id = Column(Integer, ForeignKey(Level.id))
     setter = relationship("Setter", back_populates="questions", lazy="selectin")
     level = relationship("Level", back_populates="questions", lazy="selectin")
-#     questions = relationship("Submission", back_populates="submissions", lazy="selectin")
+    submissions = relationship("Submission", back_populates="question", lazy="selectin")
     tags = relationship("Tag", secondary="question_tag", back_populates="questions", lazy="selectin")
     test_cases = relationship("TestCase", back_populates="questions", lazy="selectin")
 
@@ -90,6 +90,7 @@ class Submission(Base):
     failed_test_case_id = Column(Integer, ForeignKey(TestCase.id), default=0)
     status=Column(String, default="Accepted")
     question_id = Column(Integer, ForeignKey(Question.id))
-#     solvers = relationship("Solver", back_populates="submissions", lazy="selectin")
-#     languages = relationship("Language", back_populates="submissions", lazy="selectin")
-#     submissions = relationship("Question", back_populates="questions", lazy="selectin")
+    solver = relationship("Solver", back_populates="submissions", lazy="selectin")
+    languages = relationship("Language", back_populates="submissions", lazy="selectin")
+    question = relationship("Question", back_populates="submissions", lazy="selectin")
+    
