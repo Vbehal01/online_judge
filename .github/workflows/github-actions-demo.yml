@@ -13,6 +13,8 @@ jobs:
         with:
           username: vanshbehal01
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Switch to main branch
+        uses: actions/checkout@main
       - name: Build docker image and push to docker hub
         run: |
           cd backend
