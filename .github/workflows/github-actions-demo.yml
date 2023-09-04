@@ -1,0 +1,25 @@
+name: Bilding Docker image
+run-name: ${{ github.actor }} is building docker image 🚀
+on:
+  push:
+    branches:
+      - main
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Read files from the main branch
+        run: |
+          git fetch origin main:main 
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: vanshbehal01
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Switch to main branch
+        uses: actions/checkout@main
+      - name: Build docker image and push to docker hub
+        run: |
+          cd backend
+          docker build -t vanshbehal01/online_judge:backend .
+          docker push vanshbehal01/online_judge:backend

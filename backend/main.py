@@ -4,7 +4,7 @@ import model, schema, crud
 from database import engine, SessionLocal
 from auth import create_token, decode_token
 import logging
-
+# vabdguvbasiuvbsaibvanbiogudgbadghdgnhgn
 from fastapi.security import OAuth2PasswordBearer
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"login")
