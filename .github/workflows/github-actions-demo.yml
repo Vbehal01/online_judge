@@ -1,5 +1,5 @@
-name: GitHub Actions Demo
-run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+name: Bilding Docker image
+run-name: ${{ github.actor }} is building docker image 🚀
 on:
   push:
     branches:
@@ -8,8 +8,6 @@ jobs:
   ci:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out repository code
-        uses: actions/checkout@v3
       - name: Read files from the main branch
         run: |
           git fetch origin main:main
