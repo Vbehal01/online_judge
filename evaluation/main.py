@@ -7,7 +7,7 @@ from filename_generator import generate_unique_filename
 app=FastAPI()
 
 try:
-    @app.post("/evaluation/")
+    @app.post("/evaluation/python")
     def evaluation(eval: schema.EvaluationCreate):
         script_filename = f"{generate_unique_filename()}"
         with open(script_filename, 'w') as script_file:
