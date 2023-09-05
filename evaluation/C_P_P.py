@@ -2,11 +2,8 @@ from pydantic import BaseModel
 from fastapi import FastAPI, HTTPException
 import subprocess
 import os
-from datetime import datetime
+from filename_generator import generate_unique_exename, generate_unique_filename
 
-def generate_unique_filename():
-    current_time = datetime.now().strftime("%Y%m%d%H%M%S")
-    return f"dynamic_code_{current_time}.c++"
 
 #language
 class EvaluationCreate(BaseModel):
@@ -21,12 +18,13 @@ app=FastAPI()
 @app.post("/evaluation/CPP")
 def evaluation(eval: EvaluationCreate):
     script_filename = f"{generate_unique_filename()}"
+    exe_filename=f"{generate_unique_exename()}"
     with open(script_filename, 'w') as script_file:
         script_file.write(eval.code)
-    
+
     try:
-        subprocess.run(["g++", f"{script_filename}", "-o", "my_program"])
-        output=subprocess.run(["./my_program"],input=eval.test_case_input.encode(), stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=False)
+        subprocess.run(["g++", f"{script_filename}", "-o", f"{exe_filename}"])
+        output=subprocess.run([f"./{exe_filename}"],input=eval.test_case_input.encode(), stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=False)
         if output:
             return {"input":eval.test_case_input,
                     "output": output.stdout,
@@ -39,3 +37,4 @@ def evaluation(eval: EvaluationCreate):
     
     finally:
         os.remove(script_filename)
+        os.remove(exe_filename)
