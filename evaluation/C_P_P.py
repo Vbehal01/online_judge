@@ -1,22 +1,13 @@
-from pydantic import BaseModel
+import schema
 from fastapi import FastAPI, HTTPException
 import subprocess
 import os
 from filename_generator import generate_unique_exename, generate_unique_filename
 
-
-#language
-class EvaluationCreate(BaseModel):
-    code: str
-    test_case_input: str
-    
-    class Config:
-        orm_mode = True
-
 app=FastAPI()
 
 @app.post("/evaluation/CPP")
-def evaluation(eval: EvaluationCreate):
+def evaluation(eval: schema.EvaluationCreate):
     script_filename = f"{generate_unique_filename()}"
     exe_filename=f"{generate_unique_exename()}"
     with open(script_filename, 'w') as script_file:
