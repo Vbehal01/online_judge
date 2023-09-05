@@ -18,27 +18,24 @@ class EvaluationCreate(BaseModel):
 
 app=FastAPI()
 
-try:
-    @app.post("/evaluation/CPP")
-    def evaluation(eval: EvaluationCreate):
-        script_filename = f"{generate_unique_filename()}"
-        with open(script_filename, 'w') as script_file:
-            script_file.write(eval.code)
+@app.post("/evaluation/CPP")
+def evaluation(eval: EvaluationCreate):
+    script_filename = f"{generate_unique_filename()}"
+    with open(script_filename, 'w') as script_file:
+        script_file.write(eval.code)
+    
+    try:
+        subprocess.run(["g++", f"{script_filename}", "-o", "my_program"])
+        output=subprocess.run(["./my_program"],input=eval.test_case_input.encode(), stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=False)
+        if output:
+            return {"input":eval.test_case_input,
+                    "output": output.stdout,
+                    "error": output.stderr}
+        else:
+            raise HTTPException(status_code=500, detail="Error while executing code")
         
-        try:
-            subprocess.run(["g++", f"{script_filename}", "-o", "my_program"])
-            output=subprocess.run(["./my_program"],input=eval.test_case_input.encode(), stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=False)
-            if output:
-                return {"input":eval.test_case_input,
-                        "output": output.stdout,
-                        "error": output.stderr}
-            else:
-                raise HTTPException(status_code=500, detail="Error while executing code")
-            
-        except subprocess.CalledProcessError as e:
-            raise HTTPException(status_code=500, detail=str(e))
-        
-        finally:
-            os.remove(script_filename)
-except Exception as e:
-    print("an error occured",e)
+    except subprocess.CalledProcessError as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
+    finally:
+        os.remove(script_filename)
