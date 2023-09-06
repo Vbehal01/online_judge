@@ -2,7 +2,7 @@ from sqlalchemy.orm import Session
 import model, schema
 import requests
 import constants
-
+from fastapi import HTTPException
 
 # admin
 def get_admin(db: Session, admin_id: int):
@@ -193,11 +193,14 @@ def create_submission(db: Session, submission: schema.Submission, solver_id: str
         elif(language.title=="cpp"):
             url=f'{constants.EVALUATION_SERVER_HOST}:{constants.EVALUATION_SERVER_CPP}'
         myobj={'code': submission.code, 'test_case_input': input}
-        eval=requests.post(url, json=myobj)
-        eval=eval.json()
-        if(eval["output"]!=expected_output):
-            update_submission_status_to_wrong(db, db_submission.id, test_case_id)
-            db.commit()
-            break
-
+        evaluation=requests.post(url, json=myobj)
+        eval=evaluation.json()
+        if(evaluation.status_code==200):
+            if(eval["output"]!=expected_output):
+                update_submission_status_to_wrong(db, db_submission.id, test_case_id)
+                db.commit()
+                break
+        if(evaluation.status_code==500):
+            details=eval["detail"]
+            raise HTTPException(status_code=500, detail=f"{details}")
     return db_submission
