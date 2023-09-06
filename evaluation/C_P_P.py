@@ -2,14 +2,14 @@ import schema
 from fastapi import FastAPI, HTTPException
 import subprocess
 import os
-from filename_generator import generate_unique_exename, generate_unique_filename
+from filename_generator import generate_unique_filename
 
 app=FastAPI()
 
 @app.post("/evaluation/CPP")
 def evaluation(eval: schema.EvaluationCreate):
-    script_filename = f"{generate_unique_filename()}"
-    exe_filename=f"{generate_unique_exename()}"
+    script_filename = generate_unique_filename("cpp")
+    exe_filename=generate_unique_filename("exe")
     with open(script_filename, 'w') as script_file:
         script_file.write(eval.code)
 
