@@ -9,7 +9,7 @@ app=FastAPI()
 try:
     @app.post("/evaluation/python")
     def evaluation(eval: schema.EvaluationCreate):
-        script_filename = f"{generate_unique_filename()}"
+        script_filename = generate_unique_filename("py")
         with open(script_filename, 'w') as script_file:
             script_file.write(eval.code)
 
