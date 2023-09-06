@@ -1,8 +1,4 @@
 import uuid
-def generate_unique_filename():
+def generate_unique_filename(extension: str):
     filename = uuid.uuid4().hex
-    return f"{filename}.c++"
-
-def generate_unique_exename():
-    exename = uuid.uuid4().hex
-    return f"{exename}.exe"
+    return f"{filename}.{extension}"
