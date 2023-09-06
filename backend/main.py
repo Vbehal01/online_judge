@@ -264,7 +264,7 @@ def read_testcase(test_case_id: int, db: Session = Depends(get_db), current_user
 
 
 #submission
-@app.post("/submissions", response_model=schema.Submission)
+@app.post("/submissions/", response_model=schema.Submission)
 def create_submission(submission: schema.SubmissionCreate, db: Session = Depends(get_db), current_user: model.Submission = Depends(get_current_user)):
     logging.info(f" {current_user.name} is making the request")
     db_submission = crud.create_submission(db=db, submission=submission, solver_id=current_user.id)
