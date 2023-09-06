@@ -20,16 +20,18 @@ def evaluation(eval: schema.EvaluationCreate):
         
         else:
             output=subprocess.run([f"./{exe_filename}"],input=eval.test_case_input.encode(), stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=False)
+            result=output.stdout
+            result=result.decode()
+            result=result.rstrip('\n').rstrip('\r')
             if output.returncode != 0:
                 raise HTTPException(status_code=500, detail=f"Runtime_error: {output.stderr}")
             else:
                 os.remove(exe_filename)
                 return {"input":eval.test_case_input,
-                        "output": output.stdout}
+                        "output": result}
         
     except subprocess.CalledProcessError as e:
         raise HTTPException(status_code=500, detail=str(e))
     
     finally:
         os.remove(script_filename)
-        
