@@ -1,27 +1,15 @@
-from pydantic import BaseModel
+import schema
 from fastapi import FastAPI, HTTPException
 import subprocess
 import os
-from datetime import datetime
-
-def generate_unique_filename():
-    current_time = datetime.now().strftime("%Y%m%d%H%M%S")
-    return f"dynamic_code_{current_time}.py"
-
-#language
-class EvaluationCreate(BaseModel):
-    code: str
-    test_case_input: str
-    
-    class Config:
-        orm_mode = True
+from filename_generator import generate_unique_filename
 
 app=FastAPI()
 
 try:
-    @app.post("/evaluation/")
-    def evaluation(eval: EvaluationCreate):
-        script_filename = f"{generate_unique_filename()}"
+    @app.post("/evaluation/python")
+    def evaluation(eval: schema.EvaluationCreate):
+        script_filename = generate_unique_filename("py")
         with open(script_filename, 'w') as script_file:
             script_file.write(eval.code)
 
