@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 import model, schema
 import requests
-from sqlalchemy import update
+import constants
 
 
 # admin
@@ -157,6 +157,7 @@ def get_test_case_by_id(db: Session, test_case_id: int):
     return db.query(model.TestCase).filter(model.TestCase.id == test_case_id).first()
 
 
+#submission
 def get_submissions(db: Session):
     return db.query(model.Submission).all()
 
@@ -184,15 +185,16 @@ def create_submission(db: Session, submission: schema.Submission, solver_id: str
     db_question=get_question_by_id(db, submission.question_id)
     for test_case in db_question.test_cases:
         input=test_case.input
-        print(input)
         expected_output=test_case.output
-        print(expected_output)
         test_case_id=test_case.id
-        url='http://127.0.0.1:8080/evaluation'
+        language=get_language_by_id(db, db_submission.language_id)
+        if(language.title=="python"):
+            url=f'{constants.EVALUATION_SERVER_HOST}:{constants.EVALUATION_SERVER_PYTHON}'
+        elif(language.title=="cpp"):
+            url=f'{constants.EVALUATION_SERVER_HOST}:{constants.EVALUATION_SERVER_CPP}'
         myobj={'code': submission.code, 'test_case_input': input}
         eval=requests.post(url, json=myobj)
         eval=eval.json()
-        print(eval)
         if(eval["output"]!=expected_output):
             update_submission_status_to_wrong(db, db_submission.id, test_case_id)
             db.commit()
