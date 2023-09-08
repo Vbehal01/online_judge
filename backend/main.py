@@ -1,12 +1,17 @@
-from fastapi import Depends, FastAPI, HTTPException
+from fastapi import Depends, FastAPI, HTTPException, UploadFile, File
+import boto3
 from sqlalchemy.orm import Session
 import model, schema, crud
 from database import engine, SessionLocal
 from auth import create_token, decode_token
 import logging
-# vabdguvbasiuvbsaibvanbiogudgbadghdgnhgn
 from fastapi.security import OAuth2PasswordBearer
-
+s3 = boto3.client(
+    "s3",
+    aws_access_key_id="AKIAQ5AJWYNCNEPU47G3",
+    aws_secret_access_key="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",
+    region_name="ap-south-1"
+)
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"login")
 logging.basicConfig(level=logging.DEBUG)
 
@@ -269,3 +274,17 @@ def create_submission(submission: schema.SubmissionCreate, db: Session = Depends
     logging.info(f" {current_user.name} is making the request")
     db_submission = crud.create_submission(db=db, submission=submission, solver_id=current_user.id)
     return db_submission
+
+
+#upload file to s3
+@app.post("/upload/")
+def upload_file(upload: schema.Upload):
+    s3.upload_file(Filename=f"{upload.Path}", Bucket="vanshonlinejudge", Key=f"{upload.Filename}")
+    return{"file uploaded successfully, filename: ":upload.Key}
+
+
+#download file to system
+@app.post("/download/{Filename}")
+def download_file(download: schema.Download, Filename: str):
+    s3.download_file(Filename=f"{download.Path}", Bucket="vanshonlinejudge", Key=f"{Filename}")
+    return{"file downloaded successfully, filename: ":Filename}
