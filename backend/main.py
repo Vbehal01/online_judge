@@ -6,12 +6,14 @@ from database import engine, SessionLocal
 from auth import create_token, decode_token
 import logging
 from fastapi.security import OAuth2PasswordBearer
-s3 = boto3.client(
-    "s3",
-    aws_access_key_id="AKIAQ5AJWYNCNEPU47G3",
-    aws_secret_access_key="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",
-    region_name="ap-south-1"
-)
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+access_key=os.environ["aws_access_key"]
+secret_key=os.environ["aws_secret_key"]
+s3 = boto3.client("s3", aws_access_key_id=f"{access_key}", aws_secret_access_key=f"{secret_key}", region_name="ap-south-1")
+
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"login")
 logging.basicConfig(level=logging.DEBUG)
 
@@ -267,6 +269,12 @@ def read_testcase(test_case_id: int, db: Session = Depends(get_db), current_user
         raise HTTPException(status_code=404, detail="User not found")
     return db_test_case
 
+@app.post("/questions/{question_id}/testcases/file/")
+def upload_file(upload: schema.Upload, question_id: int):
+    Filename=f"Question_{question_id}_testcase.csv"
+    s3.upload_file(Filename=f"{upload.Path}", Bucket="vanshonlinejudge", Key=f"{Filename}")
+    return{"file uploaded successfully, filename: ":Filename}
+
 
 #submission
 @app.post("/submissions/", response_model=schema.Submission)
@@ -274,17 +282,3 @@ def create_submission(submission: schema.SubmissionCreate, db: Session = Depends
     logging.info(f" {current_user.name} is making the request")
     db_submission = crud.create_submission(db=db, submission=submission, solver_id=current_user.id)
     return db_submission
-
-
-#upload file to s3
-@app.post("/upload/")
-def upload_file(upload: schema.Upload):
-    s3.upload_file(Filename=f"{upload.Path}", Bucket="vanshonlinejudge", Key=f"{upload.Filename}")
-    return{"file uploaded successfully, filename: ":upload.Key}
-
-
-#download file to system
-@app.post("/download/{Filename}")
-def download_file(download: schema.Download, Filename: str):
-    s3.download_file(Filename=f"{download.Path}", Bucket="vanshonlinejudge", Key=f"{Filename}")
-    return{"file downloaded successfully, filename: ":Filename}

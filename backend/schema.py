@@ -164,7 +164,6 @@ class TestCaseRelation(Tag):
 
 class Upload(BaseModel):
     Path: str
-    Filename: str
 
 class Download(BaseModel):
     Path: str
