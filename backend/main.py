@@ -1,18 +1,11 @@
-from fastapi import Depends, FastAPI, HTTPException, UploadFile, File
-import boto3
+from fastapi import Depends, FastAPI, HTTPException
 from sqlalchemy.orm import Session
 import model, schema, crud
 from database import engine, SessionLocal
 from auth import create_token, decode_token
 import logging
 from fastapi.security import OAuth2PasswordBearer
-from dotenv import load_dotenv
-import os
-
-load_dotenv()
-access_key=os.environ["aws_access_key"]
-secret_key=os.environ["aws_secret_key"]
-s3 = boto3.client("s3", aws_access_key_id=f"{access_key}", aws_secret_access_key=f"{secret_key}", region_name="ap-south-1")
+from aws_s3 import s3
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"login")
 logging.basicConfig(level=logging.DEBUG)
@@ -20,7 +13,6 @@ logging.basicConfig(level=logging.DEBUG)
 
 model.Base.metadata.create_all(bind=engine)
 app = FastAPI()
-
 
 def get_db():
     db = SessionLocal()
@@ -271,7 +263,7 @@ def read_testcase(test_case_id: int, db: Session = Depends(get_db), current_user
 
 @app.post("/questions/{question_id}/testcases/file/")
 def upload_file(upload: schema.Upload, question_id: int):
-    Filename=f"Question_{question_id}_testcase.csv"
+    Filename=f"Questions/{question_id}/testcases/file.csv"
     s3.upload_file(Filename=f"{upload.Path}", Bucket="vanshonlinejudge", Key=f"{Filename}")
     return{"file uploaded successfully, filename: ":Filename}
 
@@ -281,4 +273,9 @@ def upload_file(upload: schema.Upload, question_id: int):
 def create_submission(submission: schema.SubmissionCreate, db: Session = Depends(get_db), current_user: model.Submission = Depends(get_current_user)):
     logging.info(f" {current_user.name} is making the request")
     db_submission = crud.create_submission(db=db, submission=submission, solver_id=current_user.id)
+    return db_submission
+
+@app.post("/submissions_setter/{submission_id}/", response_model=schema.Submission)
+def create_submission(submission_id: int, db: Session = Depends(get_db)):
+    db_submission = crud.create_submission_setter(db=db, submission_id=submission_id)
     return db_submission
