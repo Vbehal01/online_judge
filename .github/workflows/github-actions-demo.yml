@@ -15,8 +15,20 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Switch to main branch
         uses: actions/checkout@main
-      - name: Build docker image and push to docker hub
+      - name: Build docker image for backend server and push to docker hub
         run: |
           cd backend
           docker build -t vanshbehal01/online_judge:backend .
           docker push vanshbehal01/online_judge:backend
+      - name: Build docker image for evaluation server of python and push to docker hub
+        run: |
+          cd ..
+          cd evaluation
+          docker build -t vanshbehal01/online_judge:evalution_python -f _PYTHON_.dockerfile .
+          docker push vanshbehal01/online_judge:evalution_python
+      - name: Build docker image for evaluation server of cpp and push to docker hub
+        run: |
+          cd ..
+          cd evaluation
+          docker build -t vanshbehal01/online_judge:evalution_cpp -f cpp.dockerfile .
+          docker push vanshbehal01/online_judge:evalution_cpp
