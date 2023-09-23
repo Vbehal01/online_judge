@@ -159,3 +159,11 @@ class TagRelation(Tag):
 
 class TestCaseRelation(Tag):
     questions: Question
+
+
+
+class Upload(BaseModel):
+    Path: str
+
+class Download(BaseModel):
+    Path: str

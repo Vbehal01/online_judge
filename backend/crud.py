@@ -3,6 +3,9 @@ import model, schema
 import requests
 import constants
 from fastapi import HTTPException
+from aws_s3 import s3
+import csv
+import os
 
 # admin
 def get_admin(db: Session, admin_id: int):
@@ -171,7 +174,7 @@ def update_submission_status_to_wrong(db:Session, id: int, test_case_id: int):
         submission.status = "wrong"
         db.commit()
 
-    if submission.failed_test_case_id == 0:
+    if (submission.failed_test_case_id==0 or submission.failed_test_case_id):
         submission.failed_test_case_id = test_case_id
         db.commit()
     
@@ -204,3 +207,37 @@ def create_submission(db: Session, submission: schema.Submission, solver_id: str
             details=eval["detail"]
             raise HTTPException(status_code=500, detail=f"{details}")
     return db_submission
+
+
+def create_submission_setter(db: Session, submission_id:int):
+    db_submission=get_submision_by_id(db,submission_id)
+    Filename=f"Questions/{db_submission.question_id}/testcases/file.csv"
+    path="D:\\Learning\\online_judge\\backend\\test_case.csv"
+    s3.download_file(Filename=f"{path}", Bucket="vanshonlinejudge", Key=f"{Filename}")
+    with open(f"{path}", mode="r", encoding='utf-8-sig') as file:
+        test_case = csv.DictReader(file)
+        for row in test_case:
+            test_case_id=row["id"]
+            input=row["input"]
+            expected_output=row["output"]
+            url=str()
+            language=get_language_by_id(db, db_submission.language_id)
+            if(language.title=="python"):
+                url=f"{constants.EVALUATION_SERVER_HOST}:{constants.EVALUATION_SERVER_PYTHON}"
+            elif(language.title=="cpp"):
+                url=f"{constants.EVALUATION_SERVER_HOST}:{constants.EVALUATION_SERVER_CPP}"
+            myobj={'code': db_submission.code, 'test_case_input': input}
+            evaluation=requests.post(url, json=myobj)
+            eval=evaluation.json()
+            if(evaluation.status_code==200):
+                if(eval["output"]!=expected_output):
+                    update_submission_status_to_wrong(db, db_submission.id, test_case_id)
+                    db.commit()
+                    break
+            if(evaluation.status_code==500):
+                details=eval["detail"]
+                raise HTTPException(status_code=500, detail=f"{details}")
+    db.refresh(db_submission)
+    os.remove("test_case.csv")
+    return db_submission
+
