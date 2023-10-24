@@ -119,6 +119,10 @@ def create_question(db: Session, question: schema.QuestionCreate, author_id: str
     db.refresh(db_question)
     return db_question
 
+def get_question_by_title(search_title: str, db: Session):
+    db_search=db.query(model.Question).filter(model.Question.title.ilike(f"%{search_title}%")).all()
+    return db_search
+
 
 #tag
 def create_tag(db: Session, tag: schema.TagCreate):

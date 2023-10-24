@@ -214,6 +214,11 @@ def read_question(question_id: int, db: Session = Depends(get_db), current_user:
         raise HTTPException(status_code=404, detail="User not found")
     return db_question
 
+@app.get("/question/search/{title}", response_model=list[schema.Question])
+def get_question_list_by_title(title: str, db: Session = Depends(get_db), current_user: model.Question = Depends(get_current_user)):
+    db_question_title = crud.get_question_by_title(title, db)
+    logging.info(f" {current_user.name} is making the request")
+    return db_question_title
 
 #tag
 @app.post("/tags/", response_model=schema.Tag)
