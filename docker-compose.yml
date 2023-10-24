@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+    backend:
+        image: onlinejudge_backend:backend  
+        container_name: online_judge_backend 
+        ports:
+            - "8080:8080"
+        networks:
+            - fastapi-network
+
+    evaluation_cpp:
+        image: onlinejudge_evaluationcpp:evaluation_cpp   
+        container_name: online_judge_evaluation_cpp 
+        ports:
+            - "8001:8001"
+        networks:
+            - fastapi-network
+
+    evaluation_python:
+        image: onlinejudge_evaluationpython:evaluation_python    
+        container_name: online_judge_evaluation_python 
+        ports:
+            - "8002:8002"
+        networks:
+            - fastapi-network
+
+networks:
+    fastapi-network:
